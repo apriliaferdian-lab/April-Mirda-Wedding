@@ -252,7 +252,7 @@
       ? C.event.sessions.filter(function (x) { return x.akadOnly; })[0]
       : visibleSessions[0];
     var note = el("p", "field__note", noteText.replace("{time}", noteSess ? hm(new Date(noteSess.start)) + " WIB" : ""));
-    $("#errAtt").parentNode.querySelector("legend").insertAdjacentElement("afterend", note);
+    $("#errAtt").parentNode.querySelector("legend").insertAdjacentElement("afterend", note);   // right under "Will you attend?"
   }
   $$('input[name="attendance"]').forEach(function (r) {
     r.addEventListener("change", function () { showAttendingFields(r.value === "Attending"); $("#errAtt").hidden = true; });
