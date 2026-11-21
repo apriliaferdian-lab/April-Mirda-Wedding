@@ -38,7 +38,7 @@ window.WEDDING = {
   event: {
     title: "The Wedding of Aprilia & Mirda",
     sessions: [
-      { name: "Akad Nikah", start: "2026-12-26T13:00:00+07:00", end: "2026-12-26T14:30:00+07:00" },
+      { name: "Akad Nikah", start: "2026-12-26T13:00:00+07:00", end: "2026-12-26T14:30:00+07:00", akadOnly: true },
       { name: "Resepsi",    start: "2026-12-26T14:30:00+07:00", end: "2026-12-26T17:00:00+07:00" }
     ],
     venueName: "Garpoo Batam",
@@ -48,6 +48,16 @@ window.WEDDING = {
     calendarDescription: "With joy, we invite you to celebrate the wedding of Aprilia Faiqoh Ferdian & Mirda Alfian Dwi Cahyono."
   },
 
+     /* ---------- Two kinds of invitation ----------
+     Akad guests:          https://…/?to=Name&type=akad
+     Resepsi-only guests:  https://…/?to=Name
+     {time} is filled in automatically (13.00 WIB / 14.30 WIB).        */
+  invite: {
+    default: "resepsi",
+    akadNote: "You are warmly welcome to join our Akad Nikah, and may arrive from {time}.",
+    resepsiNote: "We would love to celebrate with you at our Resepsi, which starts at {time}."
+  },
+   
   /* ---------- Dress code ---------- */
   dressCode: {
     note: "These colours are only a guide, not a rule. Please come in whatever you already have in your wardrobe.",
