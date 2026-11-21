@@ -10,8 +10,16 @@
   function fmt(d, opts) { return new Intl.DateTimeFormat("en-GB", Object.assign({ timeZone: TZ }, opts)).format(d); }
   function hm(d) { return fmt(d, { hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", "."); }
 
-  var sessions = C.event.sessions.map(function (s) { return { name: s.name, start: new Date(s.start), end: new Date(s.end) }; });
+  /* Invitation type from the link: ?type=akad → Akad + Resepsi, otherwise Resepsi only */
+  var INV = C.invite || {};
+  var typeParam = (new URLSearchParams(location.search).get("type") || INV.default || "resepsi").toLowerCase();
+  var INVITE = typeParam === "akad" ? "akad" : "resepsi";
+  document.documentElement.setAttribute("data-invite", INVITE);
+  var visibleSessions = C.event.sessions.filter(function (s) { return INVITE === "akad" || !s.akadOnly; });
+  var sessions = visibleSessions.map(function (s) { return { name: s.name, start: new Date(s.start), end: new Date(s.end) }; });
   var first = sessions[0];
+  // The Save the Date card always lists every session (same card for both invitations)
+  var allSessions = C.event.sessions.map(function (s) { return { name: s.name, start: new Date(s.start), end: new Date(s.end) }; });
   C.__dateLong = fmt(first.start, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
   /* ---------- Bind config into the page ---------- */
@@ -108,7 +116,7 @@
   c.appendChild(d);
   c.appendChild(el("p", "event__month", fmt(first.start, { month: "long" })));
   var list = el("div", "event__sessions");
-  sessions.forEach(function (s) {
+  allSessions.forEach(function (s) {
     var row = el("div", "event__session");
     row.appendChild(el("h3", "event__name", s.name));
     row.appendChild(el("p", "event__time", hm(s.start) + " – " + hm(s.end) + " WIB"));
@@ -226,8 +234,28 @@
   $$(".stepper__btn").forEach(function (b) {
     b.addEventListener("click", function () { guests.value = Math.min(max, Math.max(1, (parseInt(guests.value, 10) || 1) + parseInt(b.dataset.step, 10))); });
   });
+  // Akad / Resepsi tick boxes, built from event.sessions
+  var multiSession = visibleSessions.length > 1;   // only Akad guests get to choose
+  visibleSessions.forEach(function (sess) {
+    var lab = el("label", "choice__opt choice__opt--tick");
+    var inp = el("input"); inp.type = "checkbox"; inp.name = "events"; inp.value = sess.name;
+    inp.addEventListener("change", function () { $("#errSess").hidden = true; });
+    lab.appendChild(inp); lab.appendChild(el("span", null, sess.name + " \u00b7 " + hm(new Date(sess.start)) + "–" + hm(new Date(sess.end))));
+    $("#sessionChoices").appendChild(lab);
+  });
+  function showAttendingFields(on) { $("#guestsField").hidden = !on; $("#sessionsField").hidden = !on || !multiSession; }
+  showAttendingFields(true);
+  // Note under "Will you attend?": Akad guests get akadNote, Resepsi-only guests get resepsiNote
+  var noteText = INVITE === "akad" ? INV.akadNote : INV.resepsiNote;
+  if (noteText) {
+    var noteSess = INVITE === "akad"
+      ? C.event.sessions.filter(function (x) { return x.akadOnly; })[0]
+      : visibleSessions[0];
+    var note = el("p", "field__note", noteText.replace("{time}", noteSess ? hm(new Date(noteSess.start)) + " WIB" : ""));
+    $("#errAtt").parentNode.insertBefore(note, $("#errAtt"));
+  }
   $$('input[name="attendance"]').forEach(function (r) {
-    r.addEventListener("change", function () { $("#guestsField").hidden = r.value !== "Attending"; $("#errAtt").hidden = true; });
+    r.addEventListener("change", function () { showAttendingFields(r.value === "Attending"); $("#errAtt").hidden = true; });
   });
   $("#fName").addEventListener("input", function () { $("#errName").hidden = true; this.closest(".field").classList.remove("is-invalid"); });
 
@@ -238,17 +266,25 @@
     var ok = true;
     if (!name) { $("#errName").hidden = false; $("#fName").closest(".field").classList.add("is-invalid"); ok = false; }
     if (!att) { $("#errAtt").hidden = false; ok = false; }
-    if (!ok) { (name ? form.querySelector('input[name="attendance"]') : $("#fName")).focus(); return; }
+    var events = $$('input[name="events"]:checked').map(function (c) { return c.value; });
+    var needEvents = att === "Attending" && multiSession;
+    if (!multiSession) events = visibleSessions.map(function (x) { return x.name; });
+    if (needEvents && !events.length) { $("#errSess").hidden = false; ok = false; }
+    if (!ok) {
+      (!name ? $("#fName") : !att ? form.querySelector('input[name="attendance"]') : form.querySelector('input[name="events"]')).focus();
+      return;
+    }
     var data = {
-      name: name, attendance: att,
+      name: name, attendance: att, events: att === "Attending" ? events.join(", ") : "",
       guests: att === "Attending" ? Math.min(max, Math.max(1, parseInt(guests.value, 10) || 1)) : 0,
-      message: $("#fMsg").value.trim(), website: form.website.value
+      message: $("#fMsg").value.trim(), website: form.website.value,
+      invite: INVITE === "akad" ? "Akad + Resepsi" : "Resepsi only"
     };
     sendBtn.disabled = true; sendBtn.textContent = "Sending…"; status.className = "form__status"; status.textContent = "";
     submit(data).then(function () {
       status.textContent = att === "Attending" ? "Thank you, " + name + ". We can't wait to see you!" : "Thank you, " + name + ". You'll be missed. Thank you for your prayers.";
       if (data.message) addWish({ name: name, message: data.message, time: new Date().toISOString() }, true);
-      form.reset(); $("#guestsField").hidden = false; if (to) $("#fName").value = to;
+      form.reset(); showAttendingFields(true); if (to) $("#fName").value = to;
       sendBtn.textContent = "RSVP sent";
       setTimeout(function () { sendBtn.disabled = false; sendBtn.textContent = "Send RSVP"; }, 4000);
     }).catch(function () {
