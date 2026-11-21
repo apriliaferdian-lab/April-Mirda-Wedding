@@ -295,3 +295,10 @@ button { font: inherit; color: inherit; }
 .page { transition: opacity 1.2s var(--ease) .2s; }
 body.is-locked .page { opacity: 0; visibility: hidden; }
 .closing__names { font-size: clamp(44px, 13vw, 60px); }
+
+/* Akad + Resepsi inside one Save the Date card */
+.event__sessions { margin: 6px 0 26px; display: grid; }
+.event__session { padding: 16px 0; border-top: 1px solid var(--line); }
+.event__session:last-child { border-bottom: 1px solid var(--line); }
+.event__session .event__name { margin: 0 0 4px; font: 700 24px/1.2 var(--serif); letter-spacing: .12em; }
+.event__session .event__time { margin: 0; font: 300 24px/1.2 var(--serif); color: var(--white); letter-spacing: .04em; }
