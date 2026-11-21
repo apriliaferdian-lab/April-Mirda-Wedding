@@ -81,7 +81,7 @@ window.WEDDING = {
      Paste your Google Apps Script Web App URL here (see README, step 2).
      While it's empty, the form works in demo mode and nothing is saved. */
   rsvp: {
-    scriptUrl: "",
+    scriptUrl: "https://script.google.com/macros/s/AKfycbx1W7RKVixX7WUzEwKKnrmuUDzxhjlQBVEsVHtyT6cGNb3sPR-i4u__1zK0U0ZqhY3I/exec",
     note: "Kindly let us know by 19 December 2026.",
     maxGuests: 5,
     refreshSeconds: 30
