@@ -302,3 +302,7 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 .event__session:last-child { border-bottom: 1px solid var(--line); }
 .event__session .event__name { margin: 0 0 4px; font: 700 24px/1.2 var(--serif); letter-spacing: .12em; }
 .event__session .event__time { margin: 0; font: 300 24px/1.2 var(--serif); color: var(--white); letter-spacing: .04em; }
+
+/* Designed motion gallery: show it clean, no frame */
+#videoWrap { padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 16px; max-height: none; }
+#videoWrap video { border-radius: 16px; }
