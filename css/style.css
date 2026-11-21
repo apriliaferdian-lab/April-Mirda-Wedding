@@ -306,3 +306,8 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 /* Designed motion gallery: show it clean, no frame */
 #videoWrap { padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 16px; max-height: none; }
 #videoWrap video { border-radius: 16px; }
+
+/* Monogram image (media.monogram) */
+.monogram--image { display: block; text-shadow: none; }
+.monogram__img { display: block; margin: 0 auto; height: 110px; width: auto; max-width: 70vw; object-fit: contain; filter: drop-shadow(0 0 6px rgba(0,0,0,.35)); }
+.monogram--big .monogram__img { height: 180px; }
