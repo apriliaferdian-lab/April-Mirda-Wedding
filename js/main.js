@@ -75,32 +75,38 @@
   var q = encodeURIComponent(C.event.mapsQuery || C.event.venueName);
   var mapsUrl = C.event.mapsLink || ("https://www.google.com/maps/search/?api=1&query=" + q);
   var pageUrl = location.href.split("?")[0].split("#")[0];
-  var cards = $("#eventCards");
+  /* One card: date + both sessions + venue */
+  var last = sessions[sessions.length - 1];
+  var schedText = sessions.map(function (s) { return s.name + ": " + hm(s.start) + " – " + hm(s.end) + " WIB"; }).join("\n");
+  var cal = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text=" + encodeURIComponent(C.event.title) +
+    "&dates=" + gcal(first.start) + "/" + gcal(last.end) +
+    "&details=" + encodeURIComponent(C.event.calendarDescription + "\n\n" + schedText + "\n\n" + pageUrl) +
+    "&location=" + encodeURIComponent(C.event.venueName + ", " + C.event.venueAddress) +
+    "&ctz=" + TZ;
+  var c = el("article", "event glass reveal");
+  var d = el("div", "event__date");
+  d.appendChild(el("span", null, fmt(first.start, { weekday: "long" })));
+  d.appendChild(el("span", "event__day-num", fmt(first.start, { day: "numeric" })));
+  d.appendChild(el("span", null, fmt(first.start, { year: "numeric" })));
+  c.appendChild(d);
+  c.appendChild(el("p", "event__month", fmt(first.start, { month: "long" })));
+  var list = el("div", "event__sessions");
   sessions.forEach(function (s) {
-    var cal = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-      "&text=" + encodeURIComponent(s.name + " · " + C.event.title) +
-      "&dates=" + gcal(s.start) + "/" + gcal(s.end) +
-      "&details=" + encodeURIComponent(C.event.calendarDescription + "\n\n" + pageUrl) +
-      "&location=" + encodeURIComponent(C.event.venueName + ", " + C.event.venueAddress) +
-      "&ctz=" + TZ;
-    var c = el("article", "event glass reveal");
-    c.appendChild(el("h3", "event__name", s.name));
-    var d = el("div", "event__date");
-    d.appendChild(el("span", null, fmt(s.start, { weekday: "long" })));
-    d.appendChild(el("span", "event__day-num", fmt(s.start, { day: "numeric" })));
-    d.appendChild(el("span", null, fmt(s.start, { year: "numeric" })));
-    c.appendChild(d);
-    c.appendChild(el("p", "event__month", fmt(s.start, { month: "long" })));
-    c.appendChild(el("p", "event__time", "at " + hm(s.start) + " – " + hm(s.end) + " WIB"));
-    c.appendChild(el("p", "small event__at", "Located at"));
-    c.appendChild(el("p", "event__venue", C.event.venueName));
-    c.appendChild(el("p", "event__addr", C.event.venueAddress));
-    var btns = el("div", "event__btns");
-    var a1 = el("a", "btn btn--ghost", "Google Maps"); a1.href = mapsUrl; a1.target = "_blank"; a1.rel = "noopener";
-    var a2 = el("a", "btn btn--solid", "Save to calendar"); a2.href = cal; a2.target = "_blank"; a2.rel = "noopener";
-    btns.appendChild(a1); btns.appendChild(a2); c.appendChild(btns);
-    cards.appendChild(c);
+    var row = el("div", "event__session");
+    row.appendChild(el("h3", "event__name", s.name));
+    row.appendChild(el("p", "event__time", hm(s.start) + " – " + hm(s.end) + " WIB"));
+    list.appendChild(row);
   });
+  c.appendChild(list);
+  c.appendChild(el("p", "small event__at", "Located at"));
+  c.appendChild(el("p", "event__venue", C.event.venueName));
+  c.appendChild(el("p", "event__addr", C.event.venueAddress));
+  var btns = el("div", "event__btns");
+  var a1 = el("a", "btn btn--ghost", "Google Maps"); a1.href = mapsUrl; a1.target = "_blank"; a1.rel = "noopener";
+  var a2 = el("a", "btn btn--solid", "Save to calendar"); a2.href = cal; a2.target = "_blank"; a2.rel = "noopener";
+  btns.appendChild(a1); btns.appendChild(a2); c.appendChild(btns);
+  $("#eventCards").appendChild(c);
   $("#mapFrame").src = "https://maps.google.com/maps?q=" + q + "&z=16&output=embed";
 
   /* ---------- Countdown ---------- */
