@@ -89,7 +89,7 @@ window.WEDDING = {
 
   /* ---------- Media ---------- */
   media: {
-         monogram: "assets/images/AM monogram.png",
+         monogram: "assets/images/AM_monogram.png",
     // The moving background behind the WHOLE invitation.
     backgroundVideo: "assets/video/background.mp4",   // loops behind everything. Keep under ~10 MB.
     backgroundPoster: "assets/images/background-poster.jpg", // shown while loading / if autoplay is blocked
