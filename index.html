@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0d0d">
+  <title>The Wedding of Aprilia & Mirda · 26.12.2026</title>
+  <meta name="description" content="You're invited to the wedding of Aprilia Faiqoh Ferdian & Mirda Alfian Dwi Cahyono, 26 December 2026 at Garpoo Batam.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Wedding of Aprilia & Mirda">
+  <meta property="og:description" content="Saturday, 26 December 2026 · Garpoo Batam">
+  <meta property="og:image" content="assets/images/og.jpg">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Display:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-locked">
+
+  <!-- ============ MOVING BACKGROUND (behind everything, to the very end) ============ -->
+  <div class="bg" aria-hidden="true">
+    <video class="bg__video" id="bgVideo" muted loop playsinline autoplay preload="auto"></video>
+    <div class="bg__shade" id="bgShade"></div>
+  </div>
+
+  <!-- ============ COVER ============ -->
+  <section class="cover" id="cover" aria-label="Invitation cover">
+    <div class="cover__inner">
+      <p class="monogram" aria-hidden="true"><span data-initial="bride"></span><span data-initial="groom"></span></p>
+      <p class="kicker">The wedding of</p>
+      <h1 class="cover__names"><span data-text="bride.nickname"></span> &amp; <span data-text="groom.nickname"></span></h1>
+      <div class="cover__guest" id="guestBlock" hidden>
+        <p class="small">To Mr./Mrs./Ms.</p>
+        <p class="cover__guest-name" id="guestName"></p>
+      </div>
+      <button class="btn btn--solid" id="openBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9 6 9-6M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg>
+        Open invitation
+      </button>
+    </div>
+  </section>
+
+  <main class="page" id="main">
+
+    <!-- HERO -->
+    <section class="sec sec--hero" id="home">
+      <p class="kicker">The wedding of</p>
+      <h2 class="hero__names"><span data-text="bride.nickname"></span> &amp; <span data-text="groom.nickname"></span></h2>
+      <p class="hero__date" data-text="__dateLong"></p>
+      <a class="scroll-cue" href="#words" aria-label="Scroll down"><span></span></a>
+    </section>
+
+    <!-- VERSE + INTRO -->
+    <section class="sec sec--words" id="words">
+      <blockquote class="verse reveal" id="verse">
+        <p data-text="verse.text"></p>
+        <cite data-text="verse.source"></cite>
+      </blockquote>
+      <p class="salam reveal">Assalamu'alaikum warahmatullahi wabarakatuh</p>
+      <p class="intro reveal" data-text="intro"></p>
+      <p class="monogram monogram--big reveal" aria-hidden="true"><span data-initial="bride"></span><span data-initial="groom"></span></p>
+    </section>
+
+    <!-- COUPLE -->
+    <section class="sec sec--person" id="bride">
+      <h2 class="title reveal"><span class="title__script">The</span><span class="title__caps">Bride</span></h2>
+      <div class="portrait reveal"><img data-src="bride.photo" alt="The bride" loading="lazy"></div>
+      <h3 class="person__name reveal" data-text="bride.fullName"></h3>
+      <p class="small reveal" data-text="bride.parentsLabel"></p>
+      <p class="person__parents reveal" data-text="bride.parents"></p>
+      <a class="btn btn--ghost btn--sm" data-href="bride.instagram" target="_blank" rel="noopener" hidden>Instagram</a>
+    </section>
+
+    <section class="sec sec--person" id="groom">
+      <h2 class="title reveal"><span class="title__script">The</span><span class="title__caps">Groom</span></h2>
+      <div class="portrait reveal"><img data-src="groom.photo" alt="The groom" loading="lazy"></div>
+      <h3 class="person__name reveal" data-text="groom.fullName"></h3>
+      <p class="small reveal" data-text="groom.parentsLabel"></p>
+      <p class="person__parents reveal" data-text="groom.parents"></p>
+      <a class="btn btn--ghost btn--sm" data-href="groom.instagram" target="_blank" rel="noopener" hidden>Instagram</a>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="sec" id="countdown" aria-labelledby="cdTitle">
+      <h2 class="title reveal" id="cdTitle"><span class="title__script">Countdown</span><span class="title__caps">Timer</span></h2>
+      <div class="cd reveal" role="timer">
+        <div class="cd__unit"><span class="cd__num" id="cdD">0</span><span class="cd__lbl">Days</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdH">00</span><span class="cd__lbl">Hours</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdM">00</span><span class="cd__lbl">Minutes</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdS">00</span><span class="cd__lbl">Seconds</span></div>
+      </div>
+      <p class="cd__done" id="cdDone" hidden>Today is the day. Thank you for celebrating with us.</p>
+      <p class="body reveal" data-text="countdownNote"></p>
+    </section>
+
+    <!-- EVENTS (Akad + Resepsi cards are built from config) -->
+    <section class="sec" id="events" aria-labelledby="evTitle">
+      <h2 class="title reveal" id="evTitle"><span class="title__script">Save</span><span class="title__caps">The Date</span></h2>
+      <div class="events" id="eventCards"></div>
+      <div class="map glass reveal">
+        <iframe id="mapFrame" title="Map to the venue" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+
+    <!-- DRESS CODE -->
+    <section class="sec" id="dresscode" aria-labelledby="dressTitle">
+      <h2 class="title reveal" id="dressTitle"><span class="title__script">Dress</span><span class="title__caps">Code</span></h2>
+      <div class="swatches reveal" id="swatches"></div>
+      <p class="body reveal" data-text="dressCode.note"></p>
+    </section>
+
+    <!-- GIFT -->
+    <section class="sec" id="gift" aria-labelledby="giftTitle">
+      <h2 class="title reveal" id="giftTitle"><span class="title__script">Wedding</span><span class="title__caps">Gift</span></h2>
+      <p class="subtitle reveal" data-text="gifts.title"></p>
+      <p class="body reveal" data-text="gifts.note"></p>
+      <div class="banks" id="banks"></div>
+      <div class="send glass reveal" id="sendBlock">
+        <p class="send__title">Sending a parcel?</p>
+        <p class="small">Message the bride or groom on WhatsApp to confirm the delivery address.</p>
+        <div class="send__btns" id="waBtns"></div>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="sec" id="rsvp" aria-labelledby="rsvpTitle">
+      <h2 class="title reveal" id="rsvpTitle"><span class="title__script">Kindly</span><span class="title__caps">RSVP</span></h2>
+      <p class="body reveal" data-text="rsvp.note"></p>
+
+      <form class="form glass reveal" id="rsvpForm" novalidate>
+        <div class="field">
+          <label for="fName">Full name</label>
+          <input id="fName" name="name" type="text" autocomplete="name" required maxlength="80">
+          <p class="field__err" id="errName" hidden>Please enter your name.</p>
+        </div>
+
+        <fieldset class="field">
+          <legend>Will you attend?</legend>
+          <div class="choice">
+            <label class="choice__opt"><input type="radio" name="attendance" value="Attending" required><span>Yes, I'll be there</span></label>
+            <label class="choice__opt"><input type="radio" name="attendance" value="Not Attending"><span>Sorry, I can't make it</span></label>
+          </div>
+          <p class="field__err" id="errAtt" hidden>Please choose one.</p>
+        </fieldset>
+
+        <div class="field" id="guestsField">
+          <label for="fGuests">Number of guests, including you</label>
+          <div class="stepper">
+            <button type="button" class="stepper__btn" data-step="-1" aria-label="One fewer guest">−</button>
+            <input id="fGuests" name="guests" type="number" inputmode="numeric" min="1" value="1" required>
+            <button type="button" class="stepper__btn" data-step="1" aria-label="One more guest">+</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fMsg">Wishes for the couple <span class="opt">(optional)</span></label>
+          <textarea id="fMsg" name="message" rows="4" maxlength="500"></textarea>
+        </div>
+
+        <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <button class="btn btn--solid btn--block" type="submit" id="rsvpBtn">Send RSVP</button>
+        <p class="form__status" id="rsvpStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- GUEST BOOK (wishes) -->
+    <section class="sec" id="wishes" aria-labelledby="wishTitle">
+      <h2 class="title reveal" id="wishTitle"><span class="title__script">Guest</span><span class="title__caps">Book</span></h2>
+      <p class="small" id="wishCount"></p>
+      <div class="glass wishes-box">
+        <ol class="wishes" id="wishList" aria-live="polite"></ol>
+        <p class="wishes__empty" id="wishEmpty">No wishes yet. Be the first to leave one in the RSVP form.</p>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="sec" id="gallery" aria-labelledby="galleryTitle">
+      <h2 class="title reveal" id="galleryTitle"><span class="title__script">Our</span><span class="title__caps">Gallery</span></h2>
+      <div class="video glass" id="videoWrap" hidden></div>
+      <div class="gallery" id="galleryGrid"></div>
+    </section>
+
+    <!-- THANK YOU -->
+    <section class="sec sec--closing" id="closing">
+      <h2 class="title reveal"><span class="title__script">Thank</span><span class="title__caps">You</span></h2>
+      <p class="body reveal" data-text="closing.message"></p>
+      <p class="salam reveal">Wassalamu'alaikum warahmatullahi wabarakatuh</p>
+      <p class="closing__names reveal"><span data-text="bride.nickname"></span> &amp; <span data-text="groom.nickname"></span></p>
+      <p class="small reveal" data-text="closing.signoff"></p>
+    </section>
+  </main>
+
+  <!-- Bottom navigation -->
+  <nav class="dock" id="dock" aria-label="Sections" hidden>
+    <a href="#home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="#bride" aria-label="Couple"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></a>
+    <a href="#events" aria-label="Event"><svg viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></svg></a>
+    <a href="#gift" aria-label="Gift"><svg viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg></a>
+    <a href="#rsvp" aria-label="RSVP"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg></a>
+    <a href="#gallery" aria-label="Gallery"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l5-5 5 5 2-2 4 4"/></svg></a>
+  </nav>
+
+  <button class="music" id="musicBtn" type="button" aria-label="Pause music" aria-pressed="true" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path class="ico-on" d="M9 18V6l11-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm11-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path class="ico-off" d="M4 4l16 16"/></svg>
+  </button>
+  <audio id="bgm" loop preload="none"></audio>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
