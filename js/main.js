@@ -22,6 +22,13 @@
   $$("[data-src]").forEach(function (n) { var v = get(n.getAttribute("data-src")); if (v) n.src = v; });
   $$("[data-href]").forEach(function (n) { var v = get(n.getAttribute("data-href")); if (v) { n.href = v; n.hidden = false; } });
   $$("[data-initial]").forEach(function (n) { n.textContent = (C[n.getAttribute("data-initial")].nickname || "").charAt(0); });
+  // Your own monogram image replaces the initials everywhere (media.monogram)
+  if (C.media.monogram) {
+    $$(".monogram").forEach(function (m) {
+      var img = el("img", "monogram__img"); img.src = C.media.monogram; img.alt = ""; img.decoding = "async";
+      m.textContent = ""; m.classList.add("monogram--image"); m.appendChild(img);
+    });
+  }
 
   /* ---------- Moving background ---------- */
   var bgv = $("#bgVideo"), M = C.media;
