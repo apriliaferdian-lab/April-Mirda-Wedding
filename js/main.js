@@ -46,13 +46,21 @@
     $("#fName").value = to;
   }
 
-  /* ---------- Cover / open / music ---------- */
+  /* ---------- Cover / open / sound ----------
+     Sound comes from media.music if set, otherwise from the background
+     video itself (media.backgroundVideoSound: true). Browsers only allow
+     sound after a tap, so it switches on with "Open invitation".        */
   var audio = $("#bgm"), musicBtn = $("#musicBtn");
-  if (M.music) audio.src = M.music;
-  function setBtn(on) { musicBtn.setAttribute("aria-pressed", on ? "true" : "false"); musicBtn.setAttribute("aria-label", on ? "Pause music" : "Play music"); }
+  var soundFrom = M.music ? "music" : (M.backgroundVideo && M.backgroundVideoSound ? "video" : "");
+  if (soundFrom === "music") audio.src = M.music;
+  function setBtn(on) { musicBtn.setAttribute("aria-pressed", on ? "true" : "false"); musicBtn.setAttribute("aria-label", on ? "Mute sound" : "Play sound"); }
   function setMusic(on) {
-    if (!M.music) return;
-    if (on) { var p = audio.play(); if (p && p.catch) p.catch(function () { setBtn(false); }); } else audio.pause();
+    if (soundFrom === "music") {
+      if (on) { var p = audio.play(); if (p && p.catch) p.catch(function () { setBtn(false); }); } else audio.pause();
+    } else if (soundFrom === "video") {
+      bgv.muted = !on;
+      if (on) { var q2 = bgv.play(); if (q2 && q2.catch) q2.catch(function () { bgv.muted = true; bgv.play().catch(function () {}); setBtn(false); }); }
+    } else return;
     setBtn(on);
   }
   $("#openBtn").addEventListener("click", function () {
@@ -60,12 +68,13 @@
     document.body.classList.remove("is-locked");
     window.scrollTo(0, 0);
     if (M.backgroundVideo) bgv.play().catch(function () {});
-    if (M.music) { musicBtn.hidden = false; setMusic(true); }
+    if (soundFrom) { musicBtn.hidden = false; setMusic(true); }
     $("#dock").hidden = false;
     setTimeout(function () { $("#cover").hidden = true; }, 1100);
   });
-  musicBtn.addEventListener("click", function () { setMusic(audio.paused); });
+  musicBtn.addEventListener("click", function () { setMusic(musicBtn.getAttribute("aria-pressed") !== "true"); });
   document.addEventListener("visibilitychange", function () {
+    if (soundFrom !== "music") return;   // a video pauses itself when the tab is hidden
     if (document.hidden && !audio.paused) { audio.pause(); audio.dataset.resume = "1"; }
     else if (!document.hidden && audio.dataset.resume) { delete audio.dataset.resume; setMusic(true); }
   });
@@ -157,9 +166,17 @@
     f.title = "Pre-wedding video"; f.loading = "lazy"; f.allow = "encrypted-media; picture-in-picture"; f.allowFullscreen = true;
     vw.appendChild(f); vw.hidden = false;
   } else if (M.video) {
-    var v = el("video"); v.src = M.video; v.controls = true; v.playsInline = true; v.preload = "none";
-    v.addEventListener("play", function () { if (!audio.paused) { audio.pause(); v.dataset.music = "1"; setBtn(false); } });
-    v.addEventListener("pause", function () { if (v.dataset.music) { delete v.dataset.music; setMusic(true); } });
+    // Designed motion gallery: silent, autoplay, loop — plays only while on screen
+    var v = el("video");
+    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = "metadata";
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-label", "Pre-wedding gallery");
+    if (M.videoPoster) v.poster = M.videoPoster;
+    v.src = M.video;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) v.play().catch(function () {}); else v.pause(); });
+      }, { threshold: 0.2 }).observe(vw);
+    }
     vw.appendChild(v); vw.hidden = false;
   }
 
