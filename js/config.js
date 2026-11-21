@@ -81,7 +81,7 @@ window.WEDDING = {
      Paste your Google Apps Script Web App URL here (see README, step 2).
      While it's empty, the form works in demo mode and nothing is saved. */
   rsvp: {
-    scriptUrl: "https://script.google.com/macros/s/AKfycbx1W7RKVixX7WUzEwKKnrmuUDzxhjlQBVEsVHtyT6cGNb3sPR-i4u__1zK0U0ZqhY3I/exec",
+    scriptUrl: "",
     note: "Kindly let us know by 19 December 2026.",
     maxGuests: 5,
     refreshSeconds: 30
@@ -90,22 +90,17 @@ window.WEDDING = {
   /* ---------- Media ---------- */
   media: {
     // The moving background behind the WHOLE invitation.
-    backgroundVideo: "assets/video/background.mp4",   // muted, looping. Keep under ~8 MB.
+    backgroundVideo: "assets/video/background.mp4",   // loops behind everything. Keep under ~10 MB.
     backgroundPoster: "assets/images/background-poster.jpg", // shown while loading / if autoplay is blocked
     backgroundDarkness: 0.5,  // 0 = no dimming, 0.8 = very dark. Raise it if text is hard to read.
+    backgroundVideoSound: true, // true = the background video's own sound plays after "Open invitation"
+                                // (the floating button mutes/unmutes it). Ignored if "music" below is set.
 
-    coverImage: "assets/images/cover.jpg",          // opening screen before "Open invitation"
-    gallery: [
-      "assets/images/gallery-1.jpg",
-      "assets/images/gallery-2.jpg",
-      "assets/images/gallery-3.jpg",
-      "assets/images/gallery-4.jpg",
-      "assets/images/gallery-5.jpg",
-      "assets/images/gallery-6.jpg"
-    ],
-    video: "",                 // optional pre-wedding film in the gallery, e.g. "assets/video/prewedding.mp4"
-    youtubeId: "",             // or a YouTube ID instead of a file
-    music: ""                  // e.g. "assets/music/song.mp3"
+    gallery: [],               // photo grid — empty = hidden (the gallery video replaces it)
+    video: "assets/video/gallery.mp4",   // designed motion gallery: silent, autoplays, loops
+    videoPoster: "",           // optional still shown before the gallery video loads
+    youtubeId: "",             // alternative to a video file (overrides "video")
+    music: ""                  // optional separate song file; leave "" to use the background video's sound
   },
 
   /* ---------- Closing ---------- */
