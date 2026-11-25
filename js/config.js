@@ -24,9 +24,9 @@ window.WEDDING = {
   },
 
   /* ---------- Opening words ---------- */
-  verse: {                   // set text to "" to hide
-    text: "And among His signs is that He created for you spouses from among yourselves so that you may find tranquility in them, and He placed between you affection and mercy.",
-    source: "QS. Ar-Rum : 21"
+   verse: {
+    text: "If there's any kind of magic in this world, it must be in the attempt of understanding someone, sharing something...\n\nI know, it's almost impossible to succeed, but... who cares, really? The answer must be in the attempt.",
+    source: "Before Sunrise (1995)"
   },
   intro: "We are beginning a new chapter of our lives, and we would be so happy to share this moment with our family and friends. With joy, we invite you to celebrate our wedding.",
   countdownNote: "Every passing day brings us closer to our forever. Thank you for the love and prayers that brought us here.",
