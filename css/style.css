@@ -343,4 +343,3 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 .cf__dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 70%; }
 .cf__dot { width: 5px; height: 5px; padding: 0; border: 0; border-radius: 99px; background: rgba(255,255,255,.4); cursor: pointer; transition: width .3s var(--ease), background .3s; }
 .cf__dot.is-on { width: 14px; background: var(--white); }
-@media (hover: none) {
