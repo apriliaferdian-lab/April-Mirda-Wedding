@@ -182,8 +182,8 @@
     var pos = 0, target = 0, gap = 0, dragging = false, visible = false, hover = false, resumeAt = 0, nextAuto = 0, running = false;
     function mod(x) { return ((x % n) + n) % n; }
     function wrapDist(x) { var d = mod(x); return d > n / 2 ? d - n : d; }   // shortest way round the loop
-    var SIDE = 0.69;                                     // side photos are 69% of the (bigger) centre photo
-    function measure() { gap = (items[0].offsetWidth || 200) * 0.53; }       // distance between photo centres (sides tuck behind)
+    var SIDE = 0.6;                                      // side photos are 60% of the (bigger) centre photo
+    function measure() { gap = (items[0].offsetWidth || 200) * 0.461; }       // distance between photo centres (sides tuck behind)
     function render() {
       items.forEach(function (it, i) {
         var d = wrapDist(i - pos), ad = Math.abs(d);
