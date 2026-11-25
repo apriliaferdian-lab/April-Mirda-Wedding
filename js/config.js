@@ -10,13 +10,13 @@ window.WEDDING = {
     fullName: "Mirda Alfian Dwi Cahyono",
     nickname: "Mirda",
     parentsLabel: "The son of",
-    parents: "Alm. Bapak Suheri & Ibu Sri Lestari",
+    parents: "Alm. Bapak Heri Sukamto & Ibu Sri Lestari",
     photo: "assets/images/groom.jpg",
     instagram: ""            // e.g. "https://instagram.com/username" — leave "" to hide
   },
   bride: {
     fullName: "Aprilia Faiqoh Ferdian",
-    nickname: "Aprilia",
+    nickname: "April",
     parentsLabel: "The daughter of",
     parents: "Alm. Bapak Ferdiansyah & Ibu Endang Pujawati",
     photo: "assets/images/bride.jpg",
