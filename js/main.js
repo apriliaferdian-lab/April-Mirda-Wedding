@@ -161,6 +161,107 @@
   });
 
   /* ---------- Gallery + lightbox ---------- */
+  /* ---------- Photo carousel (media.coverflow) ----------
+     Three photos in view, centre one bigger. Loops endlessly, slides on its own,
+     and guests can swipe / drag / use dots and arrows at any time.          */
+  (function carousel() {
+    var photos = M.coverflow || [];
+    if (photos.length < 2) return;
+    var AUTO_MS = 3500;                                  // time on each photo while sliding on its own
+    var wrap = $("#coverflow"), stage = $("#cfTrack"), dots = $("#cfDots"), items = [], n = photos.length;
+    wrap.hidden = false;
+    photos.forEach(function (src, i) {
+      var b = el("button", "cf__item"); b.type = "button"; b.setAttribute("aria-label", "Photo " + (i + 1) + " of " + n);
+      var img = el("img"); img.src = src; img.alt = "Pre-wedding photo " + (i + 1); img.loading = i < 3 || i === n - 1 ? "eager" : "lazy"; img.decoding = "async"; img.draggable = false;
+      b.appendChild(img); stage.appendChild(b); items.push(b);
+      var d = el("button", "cf__dot"); d.type = "button"; d.setAttribute("aria-label", "Go to photo " + (i + 1));
+      d.addEventListener("click", function () { goTo(i); pauseAuto(); });
+      dots.appendChild(d);
+    });
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var pos = 0, target = 0, gap = 0, dragging = false, visible = false, hover = false, resumeAt = 0, nextAuto = 0, running = false;
+    function mod(x) { return ((x % n) + n) % n; }
+    function wrapDist(x) { var d = mod(x); return d > n / 2 ? d - n : d; }   // shortest way round the loop
+    function measure() { gap = (items[0].offsetWidth || 200) * 0.6; }        // distance between photo centres (sides tuck behind)
+    function render() {
+      items.forEach(function (it, i) {
+        var d = wrapDist(i - pos), ad = Math.abs(d);
+        var sc = 1 - Math.min(ad, 1) * 0.22;                 // sides are 78% size
+        var op = ad <= 1 ? 1 - ad * 0.35 : Math.max(0, 0.65 - (ad - 1) * 1.3);
+        it.style.transform = "translate(-50%, -50%) translateX(" + (d * gap).toFixed(1) + "px) scale(" + sc.toFixed(3) + ")";
+        it.style.opacity = op.toFixed(3);
+        it.style.zIndex = String(100 - Math.round(ad * 10));
+        it.style.visibility = ad > 2 ? "hidden" : "visible";
+        it.classList.toggle("is-centre", ad < 0.5);
+        it.tabIndex = ad < 0.5 ? 0 : -1;
+      });
+      var cur = mod(Math.round(pos));
+      $$(".cf__dot", dots).forEach(function (d, i) { d.classList.toggle("is-on", i === cur); d.setAttribute("aria-current", i === cur ? "true" : "false"); });
+    }
+    function goTo(i) { target = Math.round(pos) + wrapDist(i - Math.round(pos)); kick(); }   // shortest path
+    function step(k) { target = Math.round(target) + k; kick(); }
+    function pauseAuto() { resumeAt = performance.now() + 6000; }    // after a guest touches it, wait 6 s
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+    var lastT = 0;
+    function frame(t) {
+      var dt = lastT ? Math.min(0.05, (t - lastT) / 1000) : 0.016; lastT = t;
+      if (!dragging) {
+        if (!still && visible && !hover && !document.hidden && t > resumeAt) {
+          if (!nextAuto) nextAuto = t + AUTO_MS;
+          if (t >= nextAuto) { target = Math.round(target) + 1; nextAuto = t + AUTO_MS; }
+        } else nextAuto = 0;
+        var diff = target - pos;
+        pos = Math.abs(diff) < 0.001 ? target : pos + diff * Math.min(1, dt * (still ? 60 : 7));   // glide
+      }
+      render();
+      if (visible || Math.abs(target - pos) > 0.001 || dragging) requestAnimationFrame(frame);
+      else { running = false; lastT = 0; }
+    }
+    // swipe / drag
+    var sx = 0, sp = 0, moved = false, lastX = 0, vx = 0, lastMoveT = 0;
+    stage.addEventListener("pointerdown", function (e) {
+      dragging = true; moved = false; sx = lastX = e.clientX; sp = pos; vx = 0; lastMoveT = performance.now();
+      pauseAuto(); kick();
+    });
+    window.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var now = performance.now();
+      if (Math.abs(e.clientX - sx) > 6) moved = true;
+      vx = (e.clientX - lastX) / Math.max(1, now - lastMoveT); lastX = e.clientX; lastMoveT = now;
+      pos = sp - (e.clientX - sx) / gap;
+    });
+    function release() {
+      if (!dragging) return;
+      dragging = false;
+      var fling = Math.max(-1.5, Math.min(1.5, -vx * 0.35));      // a quick flick moves one or two photos
+      target = Math.round(pos + fling); pauseAuto(); kick();
+    }
+    window.addEventListener("pointerup", release);
+    window.addEventListener("pointercancel", release);
+    // taps: side photo → bring to centre, centre photo → open full screen
+    items.forEach(function (it, i) {
+      it.addEventListener("click", function (e) {
+        if (moved) { e.preventDefault(); return; }
+        if (it.classList.contains("is-centre")) openLightbox(photos[i], "Pre-wedding photo " + (i + 1), it);
+        else { goTo(i); pauseAuto(); }
+      });
+    });
+    if ($("#cfPrev")) $("#cfPrev").addEventListener("click", function () { step(-1); pauseAuto(); });   // arrows are optional
+    if ($("#cfNext")) $("#cfNext").addEventListener("click", function () { step(1); pauseAuto(); });
+    stage.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); pauseAuto(); }
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); pauseAuto(); }
+    });
+    // pause while a mouse rests on it (computers only; a finger tap must not stop it for good)
+    wrap.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; });
+    wrap.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hover = false; });
+    // only slide while the carousel is on screen
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.isIntersecting; if (visible) kick(); }); }, { threshold: 0.3 }).observe(wrap);
+    else { visible = true; kick(); }
+    window.addEventListener("resize", function () { measure(); render(); });
+    measure(); render();
+  })();
+
   (M.gallery || []).forEach(function (src, i) {
     var b = el("button"); b.type = "button"; b.setAttribute("aria-label", "View photo " + (i + 1));
     var img = el("img"); img.src = src; img.alt = "Pre-wedding photo " + (i + 1); img.loading = "lazy"; img.decoding = "async";
