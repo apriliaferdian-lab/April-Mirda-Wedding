@@ -182,12 +182,14 @@
     var pos = 0, target = 0, gap = 0, dragging = false, visible = false, hover = false, resumeAt = 0, nextAuto = 0, running = false;
     function mod(x) { return ((x % n) + n) % n; }
     function wrapDist(x) { var d = mod(x); return d > n / 2 ? d - n : d; }   // shortest way round the loop
-    function measure() { gap = (items[0].offsetWidth || 200) * 0.6; }        // distance between photo centres (sides tuck behind)
+    var SIDE = 0.69;                                     // side photos are 69% of the (bigger) centre photo
+    function measure() { gap = (items[0].offsetWidth || 200) * 0.53; }       // distance between photo centres (sides tuck behind)
     function render() {
       items.forEach(function (it, i) {
         var d = wrapDist(i - pos), ad = Math.abs(d);
-        var sc = 1 - Math.min(ad, 1) * 0.22;                 // sides are 78% size
-        var op = ad <= 1 ? 1 - ad * 0.35 : Math.max(0, 0.65 - (ad - 1) * 1.3);
+        var sc = 1 - Math.min(ad, 1) * (1 - SIDE);
+        var op = ad <= 1 ? 1 : Math.max(0, 1 - (ad - 1) * 2);  // sides fully solid; photos further out fade away
+        it.style.setProperty("--dim", (Math.min(ad, 1) * 0.45).toFixed(3));   // dark layer over side photos, none on centre
         it.style.transform = "translate(-50%, -50%) translateX(" + (d * gap).toFixed(1) + "px) scale(" + sc.toFixed(3) + ")";
         it.style.opacity = op.toFixed(3);
         it.style.zIndex = String(100 - Math.round(ad * 10));
