@@ -108,10 +108,11 @@ window.WEDDING = {
                                 // (the floating button mutes/unmutes it). Ignored if "music" below is set.
 
     gallery: [],               // photo grid — empty = hidden (the gallery video replaces it)
+   coverflow: ["assets/images/gallery-1.jpg", "assets/images/gallery-2.jpg", "assets/images/gallery-3.jpg", "assets/images/gallery-4.jpg", "assets/images/gallery-5.jpg", "assets/images/gallery-6.jpg"],
     video: "",   // designed motion gallery: silent, autoplays, loops
     videoPoster: "",           // optional still shown before the gallery video loads
     youtubeId: "",             // alternative to a video file (overrides "video")
-   galleryImage: "assets/images/gallery.webp",    
+   galleryImage: "",    
    music: ""                  // optional separate song file; leave "" to use the background video's sound
   },
 
