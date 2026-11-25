@@ -10,7 +10,7 @@
   <meta property="og:title" content="The Wedding of Aprilia & Mirda">
   <meta property="og:description" content="Saturday, 26 December 2026 · Garpoo Batam">
   <meta property="og:image" content="assets/images/og.jpg">
-  <link rel="icon" href="assets/images/favicon.png" type="image/png"> <link rel="apple-touch-icon" href="assets/images/favicon.png">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,6 +186,12 @@
     <section class="sec" id="gallery" aria-labelledby="galleryTitle">
       <h2 class="title reveal" id="galleryTitle"><span class="title__script">Our</span><span class="title__caps">Gallery</span></h2>
       <div class="video glass" id="videoWrap" hidden></div>
+      <div class="cf" id="coverflow" hidden>
+        <div class="cf__track" id="cfTrack" tabindex="0" aria-label="Photo gallery, swipe or use arrow keys" role="region"></div>
+        <div class="cf__nav">
+          <div class="cf__dots" id="cfDots"></div>
+        </div>
+      </div>
       <div class="gallery" id="galleryGrid"></div>
     </section>
 
