@@ -122,6 +122,7 @@ button { font: inherit; color: inherit; }
 /* Verse */
 .verse { margin: 0 auto 48px; max-width: 30ch; }
 .verse p { margin: 0 0 14px; font: italic 300 22px/1.6 var(--display); }
+.verse p { white-space: pre-line; }
 .verse cite { font: 400 12px/1 var(--sans); font-style: normal; letter-spacing: .14em; color: var(--sand); }
 .intro { margin: 0 auto; max-width: 32ch; font: 400 19px/1.8 var(--serif); color: var(--soft); }
 
