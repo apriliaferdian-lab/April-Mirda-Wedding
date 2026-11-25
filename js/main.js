@@ -167,7 +167,7 @@
   (function carousel() {
     var photos = M.coverflow || [];
     if (photos.length < 2) return;
-    var AUTO_MS = 3500;                                  // time on each photo while sliding on its own
+    var AUTO_MS = 2500;                                  // time on each photo while sliding on its own
     var wrap = $("#coverflow"), stage = $("#cfTrack"), dots = $("#cfDots"), items = [], n = photos.length;
     wrap.hidden = false;
     photos.forEach(function (src, i) {
