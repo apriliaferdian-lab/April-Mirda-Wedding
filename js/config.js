@@ -36,7 +36,7 @@ window.WEDDING = {
      The countdown counts to the FIRST session. Each session gets its
      own card with "Save to calendar" and "Google Maps" buttons.        */
   event: {
-    title: "The Wedding of Aprilia & Mirda",
+    title: "The Wedding of April & Mirda",
     sessions: [
       { name: "Akad Nikah", start: "2026-12-26T13:00:00+07:00", end: "2026-12-26T14:30:00+07:00", akadOnly: true },
       { name: "Resepsi",    start: "2026-12-26T14:30:00+07:00", end: "2026-12-26T17:00:00+07:00" }
@@ -78,7 +78,7 @@ window.WEDDING = {
     note: "Your presence and prayers are the greatest gift. But if you'd like to send a token of love, here's how.",
     banks: [
       { bank: "BCA", number: "5660476247", holder: "Mirda Alfian Dwi Cahyono" },
-      { bank: "CIMB Niaga", number: "706461211500", holder: "Aprilia Ferdian" }
+      { bank: "CIMB Niaga", number: "706461211500", holder: "Aprilia F Ferdian" }
     ],
     // Physical gifts: guests confirm the address on WhatsApp.
     // Format: country code, no "+" or spaces, e.g. "6281234567890". Leave "" to hide.
@@ -119,6 +119,6 @@ window.WEDDING = {
   /* ---------- Closing ---------- */
   closing: {
     message: "It would be our greatest honour and happiness to have you with us on our wedding day.",
-    signoff: "With love, Aprilia & Mirda, and both families"
+    signoff: "With love, April & Mirda, and both families"
   }
 };
