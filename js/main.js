@@ -41,9 +41,14 @@
   /* ---------- Moving background ---------- */
   var bgv = $("#bgVideo"), M = C.media;
   $("#bgShade").style.opacity = M.backgroundDarkness == null ? 0.5 : M.backgroundDarkness;
-  if (M.backgroundPoster) { $(".bg").style.backgroundImage = "url('" + M.backgroundPoster + "')"; bgv.poster = M.backgroundPoster; }
-  if (M.backgroundVideo) {
-    bgv.src = M.backgroundVideo;
+  // Landscape screens (computers, tablets held sideways) get the landscape files if set;
+  // chosen once on load so the video and its sound never restart mid-visit.
+  var wide = window.matchMedia && window.matchMedia("(min-aspect-ratio: 1/1)").matches;
+  var bgSrc = (wide && M.backgroundVideoDesktop) || M.backgroundVideo;
+  var bgPoster = (wide && M.backgroundPosterDesktop) || M.backgroundPoster;
+  if (bgPoster) { $(".bg").style.backgroundImage = "url('" + bgPoster + "')"; bgv.poster = bgPoster; }
+  if (bgSrc) {
+    bgv.src = bgSrc;
     bgv.muted = true;                 // required for autoplay on iPhone/Android
     var tryPlay = function () { var p = bgv.play(); if (p && p.catch) p.catch(function () {}); };
     tryPlay();
@@ -172,6 +177,13 @@
     lb.addEventListener("click", function (e) { if (e.target !== img) close(); });
     document.addEventListener("keydown", onKey);
     lb.appendChild(img); lb.appendChild(x); document.body.appendChild(lb); x.focus();
+  }
+  // Designed collage image (media.galleryImage): full width, natural height, never cropped.
+  // Transparent areas (PNG/WebP) let the moving background show through.
+  if (M.galleryImage) {
+    var col = el("img", "gallery-collage");
+    col.src = M.galleryImage; col.alt = "Pre-wedding photo collage"; col.loading = "lazy"; col.decoding = "async";
+    $("#galleryGrid").parentNode.insertBefore(col, $("#galleryGrid"));
   }
   var vw = $("#videoWrap");
   if (M.youtubeId) {
