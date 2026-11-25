@@ -25,7 +25,7 @@ window.WEDDING = {
 
   /* ---------- Opening words ---------- */
    verse: {
-    text: "If there's any kind of magic in this world, it must be in the attempt of understanding someone, sharing something...\n\nI know, it's almost impossible to succeed, but... who cares, really? The answer must be in the attempt.",
+    text: "“If there's any kind of magic in this world, it must be in the attempt of understanding someone, sharing something...\n\nI know, it's almost impossible to succeed, but... who cares, really? The answer must be in the attempt.”",
     source: "Before Sunrise (1995)"
   },
   intro: "We are beginning a new chapter of our lives, and we would be so happy to share this moment with our family and friends. With joy, we invite you to celebrate our wedding.",
