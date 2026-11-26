@@ -136,3 +136,4 @@ window.WEDDING = {
     names: "April & Mirda",
     families: "and both families"
   }
+};
