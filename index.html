@@ -52,15 +52,26 @@
       <a class="scroll-cue" href="#words" aria-label="Scroll down"><span></span></a>
     </section>
 
-    <!-- VERSE + INTRO -->
+    <!-- QUOTE + MONOGRAM + INTRO -->
     <section class="sec sec--words" id="words">
       <blockquote class="verse reveal" id="verse">
         <p data-text="verse.text"></p>
         <cite data-text="verse.source"></cite>
       </blockquote>
-      <p class="salam reveal"></p>
-      <p class="intro reveal" data-text="intro"></p>
       <p class="monogram monogram--big reveal" aria-hidden="true"><span data-initial="bride"></span><span data-initial="groom"></span></p>
+      <p class="intro reveal" data-text="intro"></p>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="sec" id="countdown" aria-labelledby="cdTitle">
+      <h2 class="title reveal" id="cdTitle"><span class="title__script">Countdown</span><span class="title__caps">Timer</span></h2>
+      <div class="cd reveal" role="timer">
+        <div class="cd__unit"><span class="cd__num" id="cdD">0</span><span class="cd__lbl">Days</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdH">00</span><span class="cd__lbl">Hours</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdM">00</span><span class="cd__lbl">Minutes</span></div>
+        <div class="cd__unit"><span class="cd__num" id="cdS">00</span><span class="cd__lbl">Seconds</span></div>
+      </div>
+      <p class="cd__done" id="cdDone" hidden>Today is the day. Thank you for celebrating with us.</p>
     </section>
 
     <!-- COUPLE -->
@@ -82,17 +93,12 @@
       <a class="btn btn--ghost btn--sm" data-href="groom.instagram" target="_blank" rel="noopener" hidden>Instagram</a>
     </section>
 
-    <!-- COUNTDOWN -->
-    <section class="sec" id="countdown" aria-labelledby="cdTitle">
-      <h2 class="title reveal" id="cdTitle"><span class="title__script">Countdown</span><span class="title__caps">Timer</span></h2>
-      <div class="cd reveal" role="timer">
-        <div class="cd__unit"><span class="cd__num" id="cdD">0</span><span class="cd__lbl">Days</span></div>
-        <div class="cd__unit"><span class="cd__num" id="cdH">00</span><span class="cd__lbl">Hours</span></div>
-        <div class="cd__unit"><span class="cd__num" id="cdM">00</span><span class="cd__lbl">Minutes</span></div>
-        <div class="cd__unit"><span class="cd__num" id="cdS">00</span><span class="cd__lbl">Seconds</span></div>
-      </div>
-      <p class="cd__done" id="cdDone" hidden>Today is the day. Thank you for celebrating with us.</p>
-      <p class="body reveal" data-text="countdownNote"></p>
+    <!-- A LITTLE STORY (text lives in config.js → story) -->
+    <section class="sec sec--story" id="story" aria-labelledby="storyTitle" hidden>
+      <h2 class="title reveal" id="storyTitle"><span class="title__script" data-text="story.title"></span></h2>
+      <p class="story__sub reveal" data-text="story.subtitle"></p>
+      <div class="story__body" id="storyBody" role="region" aria-roledescription="carousel" aria-label="Our story, swipe to read"></div>
+      <div class="story__dots" id="storyDots"></div>
     </section>
 
     <!-- EVENTS (Akad + Resepsi cards are built from config) -->
@@ -111,23 +117,22 @@
       <p class="body reveal" data-text="dressCode.note"></p>
     </section>
 
-    <!-- GIFT -->
-    <section class="sec" id="gift" aria-labelledby="giftTitle">
-      <h2 class="title reveal" id="giftTitle"><span class="title__script">Wedding</span><span class="title__caps">Gift</span></h2>
-      <p class="subtitle reveal" data-text="gifts.title"></p>
-      <p class="body reveal" data-text="gifts.note"></p>
-      <div class="banks" id="banks"></div>
-      <div class="send glass reveal" id="sendBlock">
-        <p class="send__title">Sending a parcel?</p>
-        <p class="small">Message the bride or groom on WhatsApp to confirm the delivery address.</p>
-        <div class="send__btns" id="waBtns"></div>
+    <!-- GALLERY -->
+    <section class="sec" id="gallery" aria-label="Our gallery">
+      <div class="video glass" id="videoWrap" hidden></div>
+      <div class="cf" id="coverflow" hidden>
+        <div class="cf__track" id="cfTrack" tabindex="0" aria-label="Photo gallery, swipe or use arrow keys" role="region"></div>
+        <div class="cf__nav">
+          <div class="cf__dots" id="cfDots"></div>
+        </div>
       </div>
+      <div class="gallery" id="galleryGrid"></div>
     </section>
 
     <!-- RSVP -->
     <section class="sec" id="rsvp" aria-labelledby="rsvpTitle">
       <h2 class="title reveal" id="rsvpTitle"><span class="title__script">Kindly</span><span class="title__caps">RSVP</span></h2>
-      <p class="body reveal" data-text="rsvp.note"></p>
+      <p class="body rsvp__note reveal" data-text="rsvp.note"></p>
 
       <form class="form glass reveal" id="rsvpForm" novalidate>
         <div class="field">
@@ -172,6 +177,18 @@
       </form>
     </section>
 
+    <!-- GIFT -->
+    <section class="sec" id="gift" aria-labelledby="giftTitle">
+      <h2 class="title reveal" id="giftTitle"><span class="title__script">Wedding</span><span class="title__caps">Gift</span></h2>
+      <p class="body reveal" data-text="gifts.note"></p>
+      <div class="banks" id="banks"></div>
+      <div class="send glass reveal" id="sendBlock">
+        <p class="send__title">Sending a parcel?</p>
+        <p class="small">Message the bride or groom on WhatsApp to confirm the delivery address.</p>
+        <div class="send__btns" id="waBtns"></div>
+      </div>
+    </section>
+
     <!-- GUEST BOOK (wishes) -->
     <section class="sec" id="wishes" aria-labelledby="wishTitle">
       <h2 class="title reveal" id="wishTitle"><span class="title__script">Guest</span><span class="title__caps">Book</span></h2>
@@ -180,19 +197,6 @@
         <ol class="wishes" id="wishList" aria-live="polite"></ol>
         <p class="wishes__empty" id="wishEmpty">No wishes yet. Be the first to leave one in the RSVP form.</p>
       </div>
-    </section>
-
-    <!-- GALLERY -->
-    <section class="sec" id="gallery" aria-labelledby="galleryTitle">
-      <h2 class="title reveal" id="galleryTitle"><span class="title__script">Our</span><span class="title__caps">Gallery</span></h2>
-      <div class="video glass" id="videoWrap" hidden></div>
-      <div class="cf" id="coverflow" hidden>
-        <div class="cf__track" id="cfTrack" tabindex="0" aria-label="Photo gallery, swipe or use arrow keys" role="region"></div>
-        <div class="cf__nav">
-          <div class="cf__dots" id="cfDots"></div>
-        </div>
-      </div>
-      <div class="gallery" id="galleryGrid"></div>
     </section>
 
     <!-- THANK YOU -->
@@ -210,9 +214,9 @@
     <a href="#home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
     <a href="#bride" aria-label="Couple"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></a>
     <a href="#events" aria-label="Event"><svg viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></svg></a>
-    <a href="#gift" aria-label="Gift"><svg viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg></a>
-    <a href="#rsvp" aria-label="RSVP"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg></a>
     <a href="#gallery" aria-label="Gallery"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l5-5 5 5 2-2 4 4"/></svg></a>
+    <a href="#rsvp" aria-label="RSVP"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg></a>
+    <a href="#gift" aria-label="Gift"><svg viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg></a>
   </nav>
 
   <button class="music" id="musicBtn" type="button" aria-label="Pause music" aria-pressed="true" hidden>
