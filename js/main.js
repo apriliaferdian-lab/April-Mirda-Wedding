@@ -158,7 +158,7 @@
   C.dressCode.colors.forEach(function (c) {
     var w = el("div", "swatch"), chip = el("span", "swatch__chip");
     chip.style.background = c.hex;
-    w.appendChild(chip); w.appendChild(el("span", "swatch__name", c.name)); w.appendChild(el("span", "swatch__hex", c.hex.toUpperCase()));
+    w.appendChild(chip); w.appendChild(el("span", "swatch__name", c.name));
     $("#swatches").appendChild(w);
   });
 
