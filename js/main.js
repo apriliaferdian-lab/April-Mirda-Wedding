@@ -48,6 +48,8 @@
   var bgPoster = (wide && M.backgroundPosterDesktop) || M.backgroundPoster;
   if (bgPoster) { $(".bg").style.backgroundImage = "url('" + bgPoster + "')"; bgv.poster = bgPoster; }
   if (bgSrc) {
+    // If the video file is missing or can't play, remove it so the poster image shows instead of a blank box
+    bgv.addEventListener("error", function () { bgv.remove(); }, true);
     bgv.src = bgSrc;
     bgv.muted = true;                 // required for autoplay on iPhone/Android
     var tryPlay = function () { var p = bgv.play(); if (p && p.catch) p.catch(function () {}); };
