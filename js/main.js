@@ -38,6 +38,100 @@
     });
   }
 
+  /* ---------- A little story: one paragraph per slide, slides on its own, loops (config.js → story) ---------- */
+  (function story() {
+    var S = C.story || {}, paras = S.paragraphs || [];
+    if (!paras.length) return;
+    var ICONS = {   // small line drawings, one per paragraph (config: story.icons)
+      match:   '<path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M9.5 8.4c-.7-1-2.3-.6-2.3.6 0 1.2 2.3 2.5 2.3 2.5s2.3-1.3 2.3-2.5c0-1.2-1.6-1.6-2.3-.6z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2v2.5L17 18h-4"/>',
+      sprout:  '<path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7.5-6.5 0 4.2-3 6.5-7.5 6.5z"/><path d="M12 14.5c0-3.3-2.6-5.5-6.5-5.5 0 3.4 2.6 5.5 6.5 5.5z"/><path d="M7 21h10"/>',
+      hearts:  '<path d="M9 19s-6-3.7-6-8.4A3.4 3.4 0 0 1 9 8.4a3.4 3.4 0 0 1 6 2.2C15 15.3 9 19 9 19z"/><path d="M15.5 15.6c2.9-2 5.5-4.4 5.5-7a3 3 0 0 0-5.3-1.9"/>',
+      bouquet: '<circle cx="8" cy="7" r="2.3"/><circle cx="12" cy="4.6" r="2.3"/><circle cx="16" cy="7" r="2.3"/><path d="M8 9.3L11.2 15M12 6.9V15M16 9.3L12.8 15"/><path d="M9 14.5h6l-2.2 7h-1.6z"/><path d="M12 16.5c-1.8-1.4-3.6-1-3.4.4.2 1.2 2.1.8 3.4-.4zm0 0c1.8-1.4 3.6-1 3.4.4-.2 1.2-2.1.8-3.4-.4z"/>',
+      book:    '<path d="M3 6.5c3-1.4 6-1.4 9 .4v13c-3-1.8-6-1.8-9-.4z"/><path d="M21 6.5c-3-1.4-6-1.4-9 .4v13c3-1.8 6-1.8 9-.4z"/>'
+    };
+    var names = S.icons || ["match", "sprout", "hearts", "bouquet", "book"];
+    var box = $("#storyBody"), dotsBox = $("#storyDots"), slides = [], dots = [], n = paras.length;
+    paras.forEach(function (t, i) {
+      var sl = el("div", "slide" + (i === n - 1 ? " slide--last" : ""));
+      sl.setAttribute("role", "group"); sl.setAttribute("aria-roledescription", "slide"); sl.setAttribute("aria-label", (i + 1) + " of " + n);
+      var key = names.at(i);
+      if (ICONS[key]) { var ic = el("span", "slide__icon"); ic.setAttribute("aria-hidden", "true"); ic.innerHTML = '<svg viewBox="0 0 24 24">' + ICONS[key] + '</svg>'; sl.appendChild(ic); }
+      sl.appendChild(el("p", "slide__p", t));
+      box.appendChild(sl); slides.push(sl);
+      var d = el("button", "slide__dot"); d.type = "button"; d.setAttribute("aria-label", "Go to part " + (i + 1));
+      d.addEventListener("click", function () { goTo(i); hold(); });
+      dotsBox.appendChild(d); dots.push(d);
+    });
+    $("#story").hidden = false;
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // time on each slide grows with its length, so longer paragraphs can be read in full
+    function readTime(i) { return Math.max(5000, paras[i].split(/\s+/).length * 260); }
+    var pos = 0, target = 0, W = 0, dragging = false, visible = false, hover = false, resumeAt = 0, nextAt = 0, running = false, lastT = 0;
+    function mod(x) { return ((x % n) + n) % n; }
+    function wrapDist(x) { var d = mod(x); return d > n / 2 ? d - n : d; }
+    function measure() {   // the box takes the height of the tallest paragraph, so nothing jumps
+      W = box.clientWidth; var h = 0;
+      slides.forEach(function (s) {   // the symbol + its paragraph, measured directly
+        var ic = s.querySelector(".slide__icon"), p = s.querySelector(".slide__p");
+        h = Math.max(h, (ic ? ic.offsetHeight + 14 : 0) + p.offsetHeight);
+      });
+      box.style.height = h + "px";
+    }
+    function render() {
+      slides.forEach(function (s, i) {
+        var d = wrapDist(i - pos), ad = Math.abs(d);
+        s.style.transform = "translateX(" + (d * W).toFixed(1) + "px)";
+        s.style.opacity = Math.max(0, 1 - ad * 1.4).toFixed(3);
+        s.style.visibility = ad > 1.2 ? "hidden" : "visible";
+        s.setAttribute("aria-hidden", ad < 0.5 ? "false" : "true");
+      });
+      var cur = mod(Math.round(pos));
+      dots.forEach(function (d, i) { d.classList.toggle("is-on", i === cur); });
+    }
+    function goTo(i) { target = Math.round(pos) + wrapDist(i - Math.round(pos)); nextAt = 0; kick(); }
+    function hold() { resumeAt = performance.now() + 8000; }   // after a guest touches it, wait 8 s before moving on
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+    function frame(t) {
+      var dt = lastT ? Math.min(0.05, (t - lastT) / 1000) : 0.016; lastT = t;
+      if (!dragging) {
+        if (!still && visible && !hover && !document.hidden && t > resumeAt) {
+          if (!nextAt) nextAt = t + readTime(mod(Math.round(target)));
+          if (t >= nextAt) { target = Math.round(target) + 1; nextAt = t + readTime(mod(Math.round(target))); }
+        } else nextAt = 0;
+        var diff = target - pos;
+        pos = Math.abs(diff) < 0.001 ? target : pos + diff * Math.min(1, dt * (still ? 60 : 6));
+      }
+      render();
+      if (visible || dragging || Math.abs(target - pos) > 0.001) requestAnimationFrame(frame); else { running = false; lastT = 0; }
+    }
+    // swipe / drag sideways
+    var sx = 0, sp = 0, lastX = 0, vx = 0, lastMoveT = 0;
+    box.addEventListener("pointerdown", function (e) { dragging = true; sx = lastX = e.clientX; sp = pos; vx = 0; lastMoveT = performance.now(); hold(); kick(); });
+    window.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var now = performance.now(); vx = (e.clientX - lastX) / Math.max(1, now - lastMoveT); lastX = e.clientX; lastMoveT = now;
+      pos = sp - (e.clientX - sx) / (W || 1);
+    });
+    function release() {
+      if (!dragging) return; dragging = false;
+      var p = pos - Math.max(-0.6, Math.min(0.6, vx * 0.6));        // a quick flick moves to the next part
+      target = Math.round(p); hold(); nextAt = 0; kick();
+    }
+    window.addEventListener("pointerup", release); window.addEventListener("pointercancel", release);
+    box.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; });
+    box.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hover = false; });
+    box.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { target = Math.round(target) - 1; hold(); kick(); }
+      if (e.key === "ArrowRight") { target = Math.round(target) + 1; hold(); kick(); }
+    });
+    box.tabIndex = 0;
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.isIntersecting; if (visible) kick(); }); }, { threshold: 0.4 }).observe(box);
+    else { visible = true; kick(); }
+    measure(); render();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); render(); });
+    window.addEventListener("resize", function () { measure(); render(); });
+  })();
+
   /* ---------- Moving background ---------- */
   var bgv = $("#bgVideo"), M = C.media;
   $("#bgShade").style.opacity = M.backgroundDarkness == null ? 0.5 : M.backgroundDarkness;
@@ -460,7 +554,7 @@
 
     var links = $$(".dock a"), map = {};
     links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
-    var groups = { groom: "bride", countdown: "events", dresscode: "events", wishes: "rsvp", closing: "gallery", words: "home" };
+    var groups = { words: "home", countdown: "home", groom: "bride", story: "bride", dresscode: "events", wishes: "gift", closing: "gift" };
     var spy = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
