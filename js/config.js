@@ -130,8 +130,9 @@ window.WEDDING = {
   },
 
   /* ---------- Closing ---------- */
-  closing: {
+    closing: {
     message: "It would be our greatest honour and happiness to have you with us on our wedding day.",
-    signoff: "With love, April & Mirda, and both families"
+    withLove: "with love,",
+    names: "April & Mirda",
+    families: "and both families"
   }
-};
