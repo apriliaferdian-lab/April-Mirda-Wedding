@@ -103,6 +103,8 @@ window.WEDDING = {
     // The moving background behind the WHOLE invitation.
     backgroundVideo: "assets/video/background.mp4",   // loops behind everything. Keep under ~10 MB.
     backgroundPoster: "assets/images/background-poster.jpg", // shown while loading / if autoplay is blocked
+   backgroundVideoDesktop: "assets/video/background-desktop.mp4",
+   backgroundPosterDesktop: "assets/images/background-poster-desktop.jpg",
     backgroundDarkness: 0.5,  // 0 = no dimming, 0.8 = very dark. Raise it if text is hard to read.
     backgroundVideoSound: true, // true = the background video's own sound plays after "Open invitation"
                                 // (the floating button mutes/unmutes it). Ignored if "music" below is set.
