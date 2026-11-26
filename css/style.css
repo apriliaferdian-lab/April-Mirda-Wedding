@@ -370,3 +370,9 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 
 /* RSVP deadline: one compact line, close to the form */
 .rsvp__note { max-width: none; margin: -12px auto 16px; font-size: 16px; line-height: 1.4; white-space: nowrap; }
+
+/* Thank you: message, a gap, then the sign-off */
+.closing__msg { line-height: 1.45; margin-bottom: 0; }                 /* tighter lines */
+.closing__sign { margin-top: 56px; }
+.closing__line { margin: 0; font: italic 300 19px/1.4 var(--display); color: var(--soft); }
+.closing__sign .closing__names { margin: 6px 0 10px; }
