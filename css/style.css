@@ -63,7 +63,7 @@ button { font: inherit; color: inherit; }
 
 .monogram { margin: 0 0 18px; font: 400 64px/1 var(--script); display: inline-flex; gap: 4px; text-shadow: var(--shadow); }
 .monogram span:last-child { transform: translateY(.28em); }
-.monogram--big { font-size: 120px; margin: 24px 0 0; opacity: .9; }
+.monogram--big { font-size: 48px; margin: 64px 0 112px; opacity: .9; }   /* 40% size; space above/below doubled */
 
 /* ---------- Glass panels ---------- */
 .glass {
@@ -311,7 +311,7 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 /* Monogram image (media.monogram) */
 .monogram--image { display: block; text-shadow: none; }
 .monogram__img { display: block; margin: 0 auto; height: 110px; width: auto; max-width: 70vw; object-fit: contain; filter: drop-shadow(0 0 6px rgba(0,0,0,.35)); }
-.monogram--big .monogram__img { height: 180px; }
+.monogram--big .monogram__img { height: 72px; }   /* 40% of the original 180px */
 
 /* Akad / Resepsi tick boxes: square instead of round */
 .choice__opt--tick span::before { border-radius: 4px; }
@@ -346,3 +346,27 @@ body.is-locked .page { opacity: 0; visibility: hidden; }
 .cf__dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 70%; }
 .cf__dot { width: 5px; height: 5px; padding: 0; border: 0; border-radius: 99px; background: rgba(255,255,255,.4); cursor: pointer; transition: width .3s var(--ease), background .3s; }
 .cf__dot.is-on { width: 14px; background: var(--white); }
+
+/* A little story: one paragraph per slide (config.js → story) */
+.story__sub { margin: -14px 0 30px; font: italic 300 22px/1.3 var(--display); color: var(--soft); }
+.sec--story .title__script { font-size: clamp(44px, 13vw, 58px); }
+.story__body {
+  position: relative; overflow: hidden; margin: 0 calc(var(--pad) * -1);
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; outline: none;
+}
+.story__body:active { cursor: grabbing; }
+.story__body:focus-visible { outline: 2px solid var(--sand); outline-offset: -2px; border-radius: 16px; }
+.slide { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; padding: 0 var(--pad); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; will-change: transform, opacity; }   /* shorter parts sit in the middle */
+.slide__icon { display: block; width: 28px; height: 28px; margin: 0 auto 14px; color: var(--sand); }
+.slide__icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.slide__p { margin: 0 auto; max-width: 31ch; font: 400 20px/1.6 var(--serif); color: var(--white); }
+.slide--last .slide__p { font-style: italic; }
+.story__dots { display: flex; justify-content: center; gap: 5px; margin-top: 26px; }
+.slide__dot { width: 5px; height: 5px; padding: 0; border: 0; border-radius: 99px; background: rgba(255,255,255,.4); cursor: pointer; transition: width .3s var(--ease), background .3s; }
+.slide__dot.is-on { width: 14px; background: var(--white); }
+
+/* gallery without a title: a little less space above the carousel */
+#gallery { padding-top: 40px; }
+
+/* RSVP deadline: one compact line, close to the form */
+.rsvp__note { max-width: none; margin: -12px auto 16px; font-size: 16px; line-height: 1.4; white-space: nowrap; }
