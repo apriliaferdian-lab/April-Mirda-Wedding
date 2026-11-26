@@ -22,7 +22,17 @@ window.WEDDING = {
     photo: "assets/images/bride.jpg",
     instagram: ""
   },
-
+  story: {
+    title: "A Little Story",
+    subtitle: "of April & Mirda",
+    paragraphs: [
+      "What began with a match on Bumble in July 2023 became a journey neither of them could have imagined.",
+      "From a missed flight and a rather unusual gift of Cosmos potting mix to their first meeting in Batam, their story has been filled with little surprises, long-distance goodbyes, shared adventures, and countless reasons to choose each other.",
+      "Through life's unexpected turns, they learned that love is not only about being together in the happiest moments, but also about showing up, staying, and finding strength in one another when things get difficult.",
+      "And then came a bouquet, caught by Mirda at April's brother's wedding and handed to April — perhaps a little preview of the day they would begin their own forever.",
+      "Today, they're turning the page to their most beautiful chapter yet."
+    ]
+  },
   /* ---------- Opening words ---------- */
    verse: {
     text: "“If there's any kind of magic in this world, it must be in the attempt of understanding someone, sharing something...\n\nI know, it's almost impossible to succeed, but... who cares, really? The answer must be in the attempt.”",
