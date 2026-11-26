@@ -61,13 +61,14 @@ window.WEDDING = {
   /* ---------- Dress code ---------- */
   dressCode: {
     note: "These colours are only a guide, not a rule. Please come in whatever you already have in your wardrobe.",
-    colors: [
+      colors: [
+      { hex: "#A4BCA5", name: "Sage" },
       { hex: "#647348", name: "Olive" },
       { hex: "#764521", name: "Cinnamon" },
-      { hex: "#D3B592", name: "Sand" },
-      { hex: "#F7E2DC", name: "Blush" },
-      { hex: "#D6993C", name: "Turmeric" },
-      { hex: "#F7F7AF", name: "Butter" },
+      { hex: "#CA9874", name: "Caramel" },
+      { hex: "#FFACD2", name: "Pink" },
+      { hex: "#F2B251", name: "Marigold" },
+      { hex: "#FBFBA0", name: "Butter" },
       { hex: "#111A24", name: "Midnight" }
     ]
   },
